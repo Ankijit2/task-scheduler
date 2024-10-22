@@ -73,7 +73,7 @@ connectDB()
         });
    
     // Schedule a task to run every second
-    cron.schedule('* * * * * *', async () => {  // This line runs the task every second
+    cron.schedule('* * * * *', async () => {  // This line runs the task every second
         try {
             const messages = await receiveMessageFromSQS(process.env.SQS_URL);
     
