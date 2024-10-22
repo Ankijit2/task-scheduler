@@ -105,7 +105,7 @@ connectDB()
                 // Update the user document with the new values
                 const updateUser = await UserData.findOneAndUpdate(
                     { _id: userId },
-                    { status: 'processed', titleHash: hash, wordCount: wordCount },
+                    { status: 'processed', titleHash: hash, wordCount: wordCount, updatedAt: Date.now() },
                     { new: true }
                 );
     
