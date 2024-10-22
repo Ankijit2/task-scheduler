@@ -1,6 +1,10 @@
+// Add this at the top to make it a Client Component
 import type { Metadata } from "next";
 
 import "./globals.css";
+import store from "./store/store";
+import { Provider } from 'react-redux';
+import StoreProvider from "@/lib/store-provider";
 
 
 export const metadata: Metadata = {
@@ -16,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
    
-      
+      <StoreProvider>
       <html lang="en">
   
       <QueryProvider>
@@ -27,6 +31,7 @@ export default function RootLayout({
         </QueryProvider>
        
       </html>
+      </StoreProvider>
 
       
     

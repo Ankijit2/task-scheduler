@@ -26,7 +26,7 @@ interface DataTableProps<TData> {
 export function DataTable<TData>({
   table,
   loading,
-  onClick,
+
 }: DataTableProps<TData & { id?: string }>) {
   return (
     <ScrollArea className='no-visible-scrollbar flex flex-1 overflow-scroll rounded-md border'>

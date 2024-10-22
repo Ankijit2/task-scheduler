@@ -8,11 +8,17 @@ import { useEffect, useState,useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { CreateData } from "./create-data";
 import { useGetData } from "../hooks/hook";
-
+import { getDataById } from "../hooks/hook";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserData } from "@/app/store/slices/user-slice";
+import { RootState } from "@/app/store/store";
 function Table() {
-    const [UserData, setUserData] = useState<UserData[]>([]);
-    const [ks, setKs] = useState('');
+
+    const dispatch = useDispatch();
+
     const { data,isLoading } = useGetData();
+    const userData = useSelector((state: RootState) => state.userData.userData);
+    console.log(userData);
     const socket = useMemo(
       () =>
         io("http://localhost:4000", {
@@ -21,16 +27,17 @@ function Table() {
       []
     );
 
+    const getDatabyId = async (id: string)=> {
+      const response =await getDataById(id)
+      console.log(response);
+    }
+
     useEffect(() => {
       socket.on('userUpdated', (updatedUser) => {
-        setKs(updatedUser);
-          setUserData((prevData) => 
-              prevData.map(user => 
-                  user.id === updatedUser.id ? updatedUser : user // Update the user data if it exists
-              )
-          );
+      
+        console.log(updatedUser);
       });
-
+      
       // Clean up the socket connection on unmount
       return () => {
           socket.off('userUpdated');
@@ -40,17 +47,13 @@ function Table() {
   
     useEffect(() => {
         if (data) {
-          setUserData(data);
+            dispatch(setUserData(data));
         }
     })
 
-    useEffect(() => {
-        if (ks) {
-         console.log(ks);
-        }
-    }, [ks])
+
     const userDataTable = useReactTable<UserData>({
-        data: UserData || [], // Use the userData prop for the data
+        data: userData|| [], // Use the userData prop for the data
         getCoreRowModel: getCoreRowModel(),
         columns: Usercolumns
     });
@@ -60,7 +63,7 @@ function Table() {
        <div className='ml-auto'>
         <CreateData/>
       </div>
-    <DataTable table={userDataTable} loading={isLoading}/>
+    <DataTable table={userDataTable} loading={isLoading} />
     </Card>
   )
 }

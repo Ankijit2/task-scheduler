@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { UserData } from '@prisma/client';
+import { status, UserData } from '@prisma/client';
+import StatusColumn from './status';
 
 export const Usercolumns: ColumnDef<UserData>[] = [
     {
@@ -44,7 +45,7 @@ export const Usercolumns: ColumnDef<UserData>[] = [
       header: () => <div className='pl-4 text-left'>Created At</div>,
       cell: ({ row }) => (
         <div className='max-w-56 break-words pl-4'>
-          {row.getValue('createdAt') || 'N/A'}
+          {new Date(row.getValue('createdAt')).toDateString() || 'N/A'}
         </div>
       ),
     },
@@ -53,9 +54,23 @@ export const Usercolumns: ColumnDef<UserData>[] = [
       header: () => <div className='pl-4 text-left'>Updated At</div>,
       cell: ({ row }) => (
         <div className='max-w-56 break-words pl-4'>
-          {row.getValue('updatedAt') || 'N/A'}
+          {new Date(row.getValue('updatedAt')).toDateString() || 'N/A'}
         </div>
       ),
+    },
+    {
+      accessorKey: 'status',
+      header: () => <div className='pl-4 text-left'>Status</div>,
+      cell: ({ row }) => {
+        const status = row.original.status;
+        const id = row.original.id;
+        return (
+        <div className='max-w-56 break-words pl-4'>
+          <StatusColumn Status= {status} id={id}/>
+        </div>
+        )
+       
+      },
     }
 
   ];
